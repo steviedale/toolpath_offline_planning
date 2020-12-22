@@ -33,8 +33,10 @@ catkin_package(
     include
   LIBRARIES
     ${PROJECT_NAME}_panels
+    ${PROJECT_NAME}_sql_panels
     ${PROJECT_NAME}_utils
     ${PROJECT_NAME}_widgets
+    ${PROJECT_NAME}_sql_widgets
   CATKIN_DEPENDS
     actionlib
     eigen_conversions
@@ -66,6 +68,17 @@ include_directories(
   ${CMAKE_CURRENT_BINARY_DIR}
 )
 
+# Utilities library
+add_library(${PROJECT_NAME}_utils
+  src/utils.cpp
+)
+target_link_libraries(${PROJECT_NAME}_utils
+  ${catkin_LIBRARIES}
+  ${PCL_LIBRARIES}
+  Qt5::Core
+)
+
+# Non-SQL Panel
 set(opp_gui_UIS
   ui/list_editor.ui
   ui/polygon_area_selection_widget.ui
@@ -83,7 +96,7 @@ set(opp_gui_widget_HEADERS
   include/${PROJECT_NAME}/widgets/surface_selection_combo_widget.h
   include/${PROJECT_NAME}/widgets/tool_path_editor_widget.h
   include/${PROJECT_NAME}/widgets/tool_path_parameters_editor_widget.h
-  include/${PROJECT_NAME}/widgets/tool_path_planner_sql_widget.h
+  include/${PROJECT_NAME}/widgets/tool_path_planner_widget.h
   include/${PROJECT_NAME}/widgets/touch_point_editor_widget.h
   include/${PROJECT_NAME}/widgets/touch_point_parameters_editor_widget.h
 )
@@ -94,17 +107,17 @@ set(opp_gui_widget_SOURCES
   src/widgets/surface_selection_combo_widget.cpp
   src/widgets/tool_path_editor_widget.cpp
   src/widgets/tool_path_parameters_editor_widget.cpp
-  src/widgets/tool_path_planner_sql_widget.cpp
+  src/widgets/tool_path_planner_widget.cpp
   src/widgets/touch_point_editor_widget.cpp
   src/widgets/touch_point_parameters_editor_widget.cpp
 )
 
 set(opp_gui_panel_HEADERS
-  include/${PROJECT_NAME}/tool_path_planner_sql_panel.h
+  include/${PROJECT_NAME}/tool_path_planner_panel.h
 )
 
 set(opp_gui_panel_SOURCES
-  src/tool_path_planner_sql_panel.cpp
+  src/tool_path_planner_panel.cpp
 )
 
 # Run the MOC on the Qt-related UIs and headers
@@ -116,16 +129,6 @@ qt5_wrap_cpp(opp_gui_widget_MOCS
 )
 qt5_wrap_cpp(opp_gui_panel_MOCS
   ${opp_gui_panel_HEADERS}
-)
-
-# Utilities library
-add_library(${PROJECT_NAME}_utils
-  src/utils.cpp
-)
-target_link_libraries(${PROJECT_NAME}_utils
-  ${catkin_LIBRARIES}
-  ${PCL_LIBRARIES}
-  Qt5::Core
 )
 
 # Qt Widgets
@@ -151,6 +154,82 @@ target_link_libraries(${PROJECT_NAME}_panels
   ${PROJECT_NAME}_widgets
 )
 
+# SQL Panel
+set(opp_gui_sql_UIS
+  ui/list_editor.ui
+  ui/polygon_area_selection_widget.ui
+  ui/segmentation_parameters_editor.ui
+  ui/surface_selection_combo_widget.ui
+  ui/tool_path_parameters_editor.ui
+  ui/tool_path_planner.ui
+  ui/touch_point_parameters_editor.ui
+)
+
+set(opp_gui_sql_widget_HEADERS
+  include/${PROJECT_NAME}/widgets/list_editor_widget_base.h
+  include/${PROJECT_NAME}/widgets/polygon_area_selection_widget.h
+  include/${PROJECT_NAME}/widgets/segmentation_parameters_editor_widget.h
+  include/${PROJECT_NAME}/widgets/surface_selection_combo_widget.h
+  include/${PROJECT_NAME}/widgets/tool_path_editor_widget.h
+  include/${PROJECT_NAME}/widgets/tool_path_parameters_editor_widget.h
+  include/${PROJECT_NAME}/widgets/tool_path_planner_sql_widget.h
+  include/${PROJECT_NAME}/widgets/touch_point_editor_widget.h
+  include/${PROJECT_NAME}/widgets/touch_point_parameters_editor_widget.h
+)
+
+set(opp_gui_sql_widget_SOURCES
+  src/widgets/polygon_area_selection_widget.cpp
+  src/widgets/segmentation_parameters_editor_widget.cpp
+  src/widgets/surface_selection_combo_widget.cpp
+  src/widgets/tool_path_editor_widget.cpp
+  src/widgets/tool_path_parameters_editor_widget.cpp
+  src/widgets/tool_path_planner_sql_widget.cpp
+  src/widgets/touch_point_editor_widget.cpp
+  src/widgets/touch_point_parameters_editor_widget.cpp
+)
+
+set(opp_gui_sql_panel_HEADERS
+  include/${PROJECT_NAME}/tool_path_planner_sql_panel.h
+)
+
+set(opp_gui_sql_panel_SOURCES
+  src/tool_path_planner_sql_panel.cpp
+)
+
+# Run the MOC on the Qt-related UIs and headers
+qt5_wrap_ui(opp_gui_sql_UIS_H
+  ${opp_gui_sql_UIS}
+)
+qt5_wrap_cpp(opp_gui_sql_widget_MOCS
+  ${opp_gui_sql_widget_HEADERS}
+)
+qt5_wrap_cpp(opp_gui_sql_panel_MOCS
+  ${opp_gui_sql_panel_HEADERS}
+)
+
+# Qt Widgets
+add_library(${PROJECT_NAME}_sql_widgets
+  ${opp_gui_sql_UIS_H}
+  ${opp_gui_sql_widget_MOCS}
+  ${opp_gui_sql_widget_SOURCES}
+)
+target_link_libraries(${PROJECT_NAME}_sql_widgets
+  ${catkin_LIBRARIES}
+  ${PCL_LIBRARIES}
+  ${PROJECT_NAME}_utils
+  Qt5::Widgets
+  Qt5::Sql
+)
+
+# Rviz Panel
+add_library(${PROJECT_NAME}_sql_panels
+  ${opp_gui_sql_panel_MOCS}
+  ${opp_gui_sql_panel_SOURCES}
+)
+target_link_libraries(${PROJECT_NAME}_sql_panels
+  ${PROJECT_NAME}_sql_widgets
+)
+
 ######################
 ## Demo Executables ##
 ######################
@@ -160,7 +239,7 @@ add_executable(segmentation_demo_app
   src/nodes/segmentation_demo_app.cpp
 )
 target_link_libraries(segmentation_demo_app
-  ${PROJECT_NAME}_widgets
+  ${PROJECT_NAME}_sql_widgets
 )
 
 # Tool Path Editor
@@ -168,7 +247,7 @@ add_executable(tool_path_editor_demo_app
   src/nodes/tool_path_editor_demo_app.cpp
 )
 target_link_libraries(tool_path_editor_demo_app
-  ${PROJECT_NAME}_widgets
+  ${PROJECT_NAME}_sql_widgets
 )
 
 # Tool Path Planner
@@ -176,7 +255,7 @@ add_executable(tool_path_planner_demo_app
   src/nodes/tool_path_planner_demo_app.cpp
 )
 target_link_libraries(tool_path_planner_demo_app
-  ${PROJECT_NAME}_widgets
+  ${PROJECT_NAME}_sql_widgets
 )
 
 # Touch Point Editor
@@ -184,7 +263,7 @@ add_executable(touch_point_editor_demo_app
   src/nodes/touch_point_editor_demo_app.cpp
 )
 target_link_libraries(touch_point_editor_demo_app
-  ${PROJECT_NAME}_widgets
+  ${PROJECT_NAME}_sql_widgets
 )
 
 #############
@@ -194,8 +273,10 @@ target_link_libraries(touch_point_editor_demo_app
 install(
   TARGETS
     ${PROJECT_NAME}_panels
+    ${PROJECT_NAME}_sql_panels
     ${PROJECT_NAME}_utils
     ${PROJECT_NAME}_widgets
+    ${PROJECT_NAME}_sql_widgets
     segmentation_demo_app
     tool_path_editor_demo_app
     tool_path_planner_demo_app
