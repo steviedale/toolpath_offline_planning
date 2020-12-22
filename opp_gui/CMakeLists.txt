@@ -83,7 +83,7 @@ set(opp_gui_widget_HEADERS
   include/${PROJECT_NAME}/widgets/surface_selection_combo_widget.h
   include/${PROJECT_NAME}/widgets/tool_path_editor_widget.h
   include/${PROJECT_NAME}/widgets/tool_path_parameters_editor_widget.h
-  include/${PROJECT_NAME}/widgets/tool_path_planner_widget.h
+  include/${PROJECT_NAME}/widgets/tool_path_planner_sql_widget.h
   include/${PROJECT_NAME}/widgets/touch_point_editor_widget.h
   include/${PROJECT_NAME}/widgets/touch_point_parameters_editor_widget.h
 )
@@ -94,17 +94,17 @@ set(opp_gui_widget_SOURCES
   src/widgets/surface_selection_combo_widget.cpp
   src/widgets/tool_path_editor_widget.cpp
   src/widgets/tool_path_parameters_editor_widget.cpp
-  src/widgets/tool_path_planner_widget.cpp
+  src/widgets/tool_path_planner_sql_widget.cpp
   src/widgets/touch_point_editor_widget.cpp
   src/widgets/touch_point_parameters_editor_widget.cpp
 )
 
 set(opp_gui_panel_HEADERS
-  include/${PROJECT_NAME}/tool_path_planner_panel.h
+  include/${PROJECT_NAME}/tool_path_planner_sql_panel.h
 )
 
 set(opp_gui_panel_SOURCES
-  src/tool_path_planner_panel.cpp
+  src/tool_path_planner_sql_panel.cpp
 )
 
 # Run the MOC on the Qt-related UIs and headers

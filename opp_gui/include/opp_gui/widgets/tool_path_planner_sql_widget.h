@@ -45,11 +45,11 @@ class ToolPathEditorWidget;
  * associated with that part. This widget interfaces with the application database to save
  * the part information for future use.
  */
-class ToolPathPlannerWidget : public QWidget
+class ToolPathPlannerSQLWidget : public QWidget
 {
   Q_OBJECT
 public:
-  ToolPathPlannerWidget(QWidget* parent = nullptr,
+  ToolPathPlannerSQLWidget(QWidget* parent = nullptr,
                         const ros::NodeHandle& nh = ros::NodeHandle("~"),
                         const std::vector<std::string>& frames = { "map" });
 

@@ -19,7 +19,7 @@
 #include <ros/ros.h>
 
 #include "opp_gui/utils.h"
-#include "opp_gui/widgets/tool_path_planner_widget.h"
+#include "opp_gui/widgets/tool_path_planner_sql_widget.h"
 
 int main(int argc, char** argv)
 {
@@ -36,7 +36,7 @@ int main(int argc, char** argv)
   // Create and start the Qt application
   QApplication app(argc, argv);
 
-  opp_gui::ToolPathPlannerWidget* tpp_widget = new opp_gui::ToolPathPlannerWidget(nullptr, nh, { fixed_frame });
+  opp_gui::ToolPathPlannerSQLWidget* tpp_widget = new opp_gui::ToolPathPlannerSQLWidget(nullptr, nh, { fixed_frame });
   tpp_widget->show();
 
   app.exec();

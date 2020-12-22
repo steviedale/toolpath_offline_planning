@@ -22,25 +22,25 @@
 
 namespace opp_gui
 {
-class ToolPathPlannerWidget;
+class ToolPathPlannerSQLWidget;
 
 /**
  * @brief Simple RViz panel that wraps the tool path planner widget such that can easily
  * be used within the context of RViz
  */
-class ToolPathPlannerPanel : public rviz::Panel
+class ToolPathPlannerSQLPanel : public rviz::Panel
 {
   Q_OBJECT
 public:
   /**
-   * @brief ToolPathPlannerPanel
+   * @brief ToolPathPlannerSQLPanel
    *
    * Note: the visualization manager object, inherited from `rviz::Panel`, cannot be used in
    * the constructor. Even though it is a valid, non-null object, it will not be initialized
    * until the constructor has finished.
    * @param parent
    */
-  ToolPathPlannerPanel(QWidget* parent = nullptr);
+  ToolPathPlannerSQLPanel(QWidget* parent = nullptr);
 
   /**
    * @brief Initializes the TPP widget and uses the visualization manager to gather
@@ -49,7 +49,7 @@ public:
   virtual void onInitialize() override;
 
 private:
-  ToolPathPlannerWidget* tpp_widget_;
+  ToolPathPlannerSQLWidget* tpp_widget_;
 
   ros::NodeHandle nh_;
 };

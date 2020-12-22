@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "opp_gui/tool_path_planner_panel.h"
+#include "opp_gui/tool_path_planner_sql_panel.h"
 
 #include <QVBoxLayout>
 
@@ -22,20 +22,20 @@
 #include <rviz/frame_manager.h>
 #include <rviz/visualization_manager.h>
 
-#include "opp_gui/widgets/tool_path_planner_widget.h"
+#include "opp_gui/widgets/tool_path_planner_sql_widget.h"
 
 namespace opp_gui
 {
-ToolPathPlannerPanel::ToolPathPlannerPanel(QWidget* parent) : rviz::Panel(parent) {}
+ToolPathPlannerSQLPanel::ToolPathPlannerSQLPanel(QWidget* parent) : rviz::Panel(parent) {}
 
-void ToolPathPlannerPanel::onInitialize()
+void ToolPathPlannerSQLPanel::onInitialize()
 {
   // Add the current fixed frame to the list if it doesn't exist in the frames that TF knows about
   std::vector<std::string> frames;
   std::string fixed_frame = vis_manager_->getFixedFrame().toStdString();
   frames.insert(frames.begin(), fixed_frame);
 
-  tpp_widget_ = new ToolPathPlannerWidget(this, nh_, frames);
+  tpp_widget_ = new ToolPathPlannerSQLWidget(this, nh_, frames);
 
   QVBoxLayout* layout = new QVBoxLayout();
   layout->addWidget(tpp_widget_);
@@ -46,4 +46,4 @@ void ToolPathPlannerPanel::onInitialize()
 }  // namespace opp_gui
 
 #include <pluginlib/class_list_macros.h>
-PLUGINLIB_EXPORT_CLASS(opp_gui::ToolPathPlannerPanel, rviz::Panel)
+PLUGINLIB_EXPORT_CLASS(opp_gui::ToolPathPlannerSQLPanel, rviz::Panel)
