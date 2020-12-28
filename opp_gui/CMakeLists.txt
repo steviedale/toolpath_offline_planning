@@ -161,7 +161,7 @@ set(opp_gui_sql_UIS
   ui/segmentation_parameters_editor.ui
   ui/surface_selection_combo_widget.ui
   ui/tool_path_parameters_editor.ui
-  ui/tool_path_planner.ui
+  ui/tool_path_planner_sql.ui
   ui/touch_point_parameters_editor.ui
 )
 

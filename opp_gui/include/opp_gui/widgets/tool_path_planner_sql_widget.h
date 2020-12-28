@@ -31,7 +31,7 @@ class QListWidgetItem;
 
 namespace Ui
 {
-class ToolPathPlanner;
+class ToolPathPlannerSQL;
 }
 
 namespace opp_gui
@@ -88,7 +88,7 @@ private:
 
   void setJobTabsEnabled(bool enabled, bool first_enabled = true);
 
-  Ui::ToolPathPlanner* ui_;
+  Ui::ToolPathPlannerSQL* ui_;
 
   TouchPointEditorWidget* touch_point_editor_;
   TouchPointEditorWidget* verification_point_editor_;

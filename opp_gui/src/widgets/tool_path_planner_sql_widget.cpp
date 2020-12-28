@@ -33,7 +33,7 @@
 #include "opp_gui/utils.h"
 #include "opp_gui/widgets/tool_path_editor_widget.h"
 #include "opp_gui/widgets/touch_point_editor_widget.h"
-#include "ui_tool_path_planner.h"
+#include "ui_tool_path_planner_sql.h"
 
 const static std::string MESH_MARKER_TOPIC = "mesh_marker";
 const static int MIN_TOUCH_POINTS = 0;
@@ -46,7 +46,7 @@ ToolPathPlannerSQLWidget::ToolPathPlannerSQLWidget(QWidget* parent,
                                              const std::vector<std::string>& frames)
   : QWidget(parent), nh_(nh)
 {
-  ui_ = new Ui::ToolPathPlanner();
+  ui_ = new Ui::ToolPathPlannerSQL();
   ui_->setupUi(this);
 
   // Add the available tf frame
