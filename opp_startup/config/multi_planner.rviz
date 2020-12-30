@@ -27,8 +27,8 @@ Panels:
     Name: Time
     SyncMode: 0
     SyncSource: ""
-  - Class: opp_gui/ToolPathPlannerSQLPanel
-    Name: ToolPathPlannerSQLPanel
+  - Class: opp_gui/MultiToolPathPlannerPanel
+    Name: MultiToolPathPlannerPanel
 Preferences:
   PromptSaveOnExit: true
 Toolbars:

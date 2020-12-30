@@ -59,8 +59,8 @@ protected Q_SLOTS:
   void setVisualizationFrame(const QString& text);
 
 //  // Parts Page
-//  void browseForMeshResource();
-//  void loadMeshFromResource();
+  void browseForMeshResource();
+  void loadMeshFromResource();
 
 //  void loadModelsFromDatabase();
 //  void onModelSelectionChanged(QListWidgetItem* current, QListWidgetItem* previous);
@@ -83,7 +83,7 @@ protected Q_SLOTS:
 private:
 //  void clear();
 
-//  bool loadMesh();
+  bool loadMesh();
 
 //  void setModelTabsEnabled(bool enabled);
 

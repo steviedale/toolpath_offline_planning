@@ -1,6 +1,6 @@
 <library path="lib/libopp_gui_sql_panels">
-  <class name="opp_gui/ToolPathPlannerSQLPanel"
-         type="opp_gui::ToolPathPlannerSQLPanel"
+  <class name="opp_gui/MultiToolPathPlannerPanel"
+         type="opp_gui::MultiToolPathPlannerPanel"
          base_class_type="rviz::Panel">
     <description>
       A panel for creating registration and tool path data for new models

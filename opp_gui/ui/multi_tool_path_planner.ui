@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ToolPathPlannerSQL</class>
- <widget class="QWidget" name="ToolPathPlannerSQL">
+ <class>MultiToolPathPlanner</class>
+ <widget class="QWidget" name="MultiToolPathPlanner">
   <property name="geometry">
    <rect>
     <x>0</x>

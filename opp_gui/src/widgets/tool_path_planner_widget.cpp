@@ -100,7 +100,7 @@ ToolPathPlannerWidget::ToolPathPlannerWidget(QWidget* parent,
 //  setJobTabsEnabled(false, false);
 
 //  // Connect the signals and slots
-//  connect(ui_->push_button_find_model_file, &QPushButton::clicked, this, &ToolPathPlannerWidget::browseForMeshResource);
+  connect(ui_->push_button_find_model_file, &QPushButton::clicked, this, &ToolPathPlannerWidget::browseForMeshResource);
 //  connect(ui_->push_button_load_parts_from_database,
 //          &QPushButton::clicked,
 //          this,
@@ -124,81 +124,81 @@ void ToolPathPlannerWidget::setVisualizationFrame(const QString& text)
 }
 
 // Parts Page
-//void ToolPathPlannerWidget::browseForMeshResource()
-//{
-//  QString filename = QFileDialog::getOpenFileName(this, "Load Model", "", "Mesh Files (*.stl *.ply *.obj)");
-//  if (filename.isEmpty())
-//  {
-//    ROS_WARN_STREAM(__func__ << ": Empty filename");
-//    return;
-//  }
+void ToolPathPlannerWidget::browseForMeshResource()
+{
+  QString filename = QFileDialog::getOpenFileName(this, "Load Model", "", "Mesh Files (*.stl *.ply *.obj)");
+  if (filename.isEmpty())
+  {
+    ROS_WARN_STREAM(__func__ << ": Empty filename");
+    return;
+  }
 
-//  ui_->line_edit_model_filename->setText(filename);
-//  loadMeshFromResource();
-//  return;
-//}
+  ui_->line_edit_model_filename->setText(filename);
+  loadMeshFromResource();
+  return;
+}
 
-//void ToolPathPlannerWidget::loadMeshFromResource()
-//{
-//  // Get the filename and package of the model
-//  std::string filename = ui_->line_edit_model_filename->text().toStdString();
-//  if (filename.empty())
-//  {
-//    QMessageBox::warning(this, "Input Error", "Model filename or package name not specified");
-//    return;
-//  }
+void ToolPathPlannerWidget::loadMeshFromResource()
+{
+  // Get the filename and package of the model
+  std::string filename = ui_->line_edit_model_filename->text().toStdString();
+  if (filename.empty())
+  {
+    QMessageBox::warning(this, "Input Error", "Model filename or package name not specified");
+    return;
+  }
 
-//  // Construct the mesh resource name using the package and filename
-//  std::vector<std::string> file_extensions = { ".stl", ".ply", ".obj" };
+  // Construct the mesh resource name using the package and filename
+  std::vector<std::string> file_extensions = { ".stl", ".ply", ".obj" };
 
-//  mesh_resource_.clear();
-//  for (const std::string& ext : file_extensions)
-//  {
-//    std::regex rgx(".*" + ext + "$");
-//    std::smatch match;
-//    if (std::regex_search(filename, match, rgx))
-//    {
-//      mesh_resource_ = "file://" + filename;
-//      break;
-//    }
-//  }
+  mesh_resource_.clear();
+  for (const std::string& ext : file_extensions)
+  {
+    std::regex rgx(".*" + ext + "$");
+    std::smatch match;
+    if (std::regex_search(filename, match, rgx))
+    {
+      mesh_resource_ = "file://" + filename;
+      break;
+    }
+  }
 
-//  if (mesh_resource_.empty())
-//  {
-//    std::string message = "Invalid mesh resource file extension. Acceptable inputs are: ";
-//    for (const std::string& ext : file_extensions)
-//      message += ext + " ";
+  if (mesh_resource_.empty())
+  {
+    std::string message = "Invalid mesh resource file extension. Acceptable inputs are: ";
+    for (const std::string& ext : file_extensions)
+      message += ext + " ";
 
-//    QMessageBox::warning(this, "Input Error", QString(message.c_str()));
-//    return;
-//  }
-//  ROS_INFO_STREAM("Attempting to load mesh from resource: '" << mesh_resource_ << "'");
+    QMessageBox::warning(this, "Input Error", QString(message.c_str()));
+    return;
+  }
+  ROS_INFO_STREAM("Attempting to load mesh from resource: '" << mesh_resource_ << "'");
 
-//  if (!loadMesh())
-//    return;
-//}
+  if (!loadMesh())
+    return;
+}
 
-//bool ToolPathPlannerWidget::loadMesh()
-//{
-//  // Attempt to load this file into a shape_msgs/Mesh type
-//  shape_msgs::Mesh mesh;
-//  if (!utils::getMeshMsgFromResource(mesh_resource_, mesh))
-//  {
-//    std::string message = "Failed to load mesh from resource: '" + mesh_resource_ + "'";
-//    QMessageBox::warning(this, "Input Error", message.c_str());
-//    return false;
-//  }
+bool ToolPathPlannerWidget::loadMesh()
+{
+  // Attempt to load this file into a shape_msgs/Mesh type
+  shape_msgs::Mesh mesh;
+  if (!utils::getMeshMsgFromResource(mesh_resource_, mesh))
+  {
+    std::string message = "Failed to load mesh from resource: '" + mesh_resource_ + "'";
+    QMessageBox::warning(this, "Input Error", message.c_str());
+    return false;
+  }
 
-//  // Initialize the tool path editor with the mesh
-//  tool_path_editor_->init(mesh);
+  // Initialize the tool path editor with the mesh
+  tool_path_parameters_editor_widget_->init(mesh);
 
-//  // Publish the mesh marker
-//  visualization_msgs::Marker mesh_marker =
-//      utils::createMeshMarker(0, "mesh", Eigen::Isometry3d::Identity(), marker_frame_, mesh_resource_);
+  // Publish the mesh marker
+  visualization_msgs::Marker mesh_marker =
+      utils::createMeshMarker(0, "mesh", Eigen::Isometry3d::Identity(), marker_frame_, mesh_resource_);
 
-//  pub_.publish(mesh_marker);
+  pub_.publish(mesh_marker);
 
-//  return true;
-//}
+  return true;
+}
 
 }  // namespace opp_gui

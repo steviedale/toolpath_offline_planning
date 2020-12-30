@@ -31,7 +31,7 @@ class QListWidgetItem;
 
 namespace Ui
 {
-class ToolPathPlannerSQL;
+class MultiToolPathPlanner;
 }
 
 namespace opp_gui
@@ -45,11 +45,11 @@ class ToolPathEditorWidget;
  * associated with that part. This widget interfaces with the application database to save
  * the part information for future use.
  */
-class ToolPathPlannerSQLWidget : public QWidget
+class MultiToolPathPlannerWidget : public QWidget
 {
   Q_OBJECT
 public:
-  ToolPathPlannerSQLWidget(QWidget* parent = nullptr,
+  MultiToolPathPlannerWidget(QWidget* parent = nullptr,
                         const ros::NodeHandle& nh = ros::NodeHandle("~"),
                         const std::vector<std::string>& frames = { "map" });
 
@@ -88,7 +88,7 @@ private:
 
   void setJobTabsEnabled(bool enabled, bool first_enabled = true);
 
-  Ui::ToolPathPlannerSQL* ui_;
+  Ui::MultiToolPathPlanner* ui_;
 
   TouchPointEditorWidget* touch_point_editor_;
   TouchPointEditorWidget* verification_point_editor_;

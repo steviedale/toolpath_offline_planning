@@ -173,10 +173,13 @@ void ToolPathParametersEditorWidget::onGenerateToolPathsComplete(
     {
       QMessageBox::warning(this, "Tool Path Planning Error", "Tool path generation failed");
     }
+    else if (res->tool_paths.size() == 0)
+    {
+      QMessageBox::warning(this, "Tool Path Planning Error", "No tool paths generated");
+    }
     else
     {
       ROS_INFO_STREAM("Successfully generated tool path");
-
       opp_msgs::ToolPath tp;
       tp.header.stamp = ros::Time::now();
       tp.process_type.val = qvariant_cast<opp_msgs::ProcessType::_val_type>(ui_->combo_box_process_type->currentData());
