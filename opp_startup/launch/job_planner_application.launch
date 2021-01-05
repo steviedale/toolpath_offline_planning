@@ -5,9 +5,9 @@
   <arg name="db_password" default="0000"/>
   <arg name="db_name" default="opp"/>
 
-  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find opp_startup)/config/multi_planner.rviz" output="screen" required="true"/>
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find opp_startup)/config/job_planner.rviz" output="screen" required="true"/>
 
-  <node name="tool_path_planner" pkg="noether" type="tool_path_planner_server" output="screen" respawn="true"/>
+  <node name="job_planner" pkg="noether" type="job_planner_server" output="screen" respawn="true"/>
 
   <!-- Launch the segmentation server -->
   <node name="mesh_segmenter_server_node" type="segmentation_server" pkg="noether" output="screen" required="true" />

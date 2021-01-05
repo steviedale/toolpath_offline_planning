@@ -32,11 +32,11 @@ catkin_package(
   INCLUDE_DIRS
     include
   LIBRARIES
-    ${PROJECT_NAME}_panels
-    ${PROJECT_NAME}_multi_panels
+    ${PROJECT_NAME}_tool_path_panels
+    ${PROJECT_NAME}_job_panels
     ${PROJECT_NAME}_utils
-    ${PROJECT_NAME}_widgets
-    ${PROJECT_NAME}_multi_widgets
+    ${PROJECT_NAME}_tool_path_widgets
+    ${PROJECT_NAME}_job_widgets
   CATKIN_DEPENDS
     actionlib
     eigen_conversions
@@ -78,8 +78,8 @@ target_link_libraries(${PROJECT_NAME}_utils
   Qt5::Core
 )
 
-# Non-SQL Panel
-set(opp_gui_UIS
+# Tool Path Panel
+set(opp_gui_tool_path_UIS
   ui/list_editor.ui
   ui/polygon_area_selection_widget.ui
   ui/segmentation_parameters_editor.ui
@@ -89,7 +89,7 @@ set(opp_gui_UIS
   ui/touch_point_parameters_editor.ui
 )
 
-set(opp_gui_widget_HEADERS
+set(opp_gui_tool_path_widget_HEADERS
   include/${PROJECT_NAME}/widgets/list_editor_widget_base.h
   include/${PROJECT_NAME}/widgets/polygon_area_selection_widget.h
   include/${PROJECT_NAME}/widgets/segmentation_parameters_editor_widget.h
@@ -101,7 +101,7 @@ set(opp_gui_widget_HEADERS
   include/${PROJECT_NAME}/widgets/touch_point_parameters_editor_widget.h
 )
 
-set(opp_gui_widget_SOURCES
+set(opp_gui_tool_path_widget_SOURCES
   src/widgets/polygon_area_selection_widget.cpp
   src/widgets/segmentation_parameters_editor_widget.cpp
   src/widgets/surface_selection_combo_widget.cpp
@@ -112,32 +112,32 @@ set(opp_gui_widget_SOURCES
   src/widgets/touch_point_parameters_editor_widget.cpp
 )
 
-set(opp_gui_panel_HEADERS
+set(opp_gui_tool_path_panel_HEADERS
   include/${PROJECT_NAME}/tool_path_planner_panel.h
 )
 
-set(opp_gui_panel_SOURCES
+set(opp_gui_tool_path_panel_SOURCES
   src/tool_path_planner_panel.cpp
 )
 
 # Run the MOC on the Qt-related UIs and headers
-qt5_wrap_ui(opp_gui_UIS_H
-  ${opp_gui_UIS}
+qt5_wrap_ui(opp_gui_tool_path_UIS_H
+  ${opp_gui_tool_path_UIS}
 )
-qt5_wrap_cpp(opp_gui_widget_MOCS
-  ${opp_gui_widget_HEADERS}
+qt5_wrap_cpp(opp_gui_tool_path_widget_MOCS
+  ${opp_gui_tool_path_widget_HEADERS}
 )
-qt5_wrap_cpp(opp_gui_panel_MOCS
-  ${opp_gui_panel_HEADERS}
+qt5_wrap_cpp(opp_gui_tool_path_panel_MOCS
+  ${opp_gui_tool_path_panel_HEADERS}
 )
 
 # Qt Widgets
-add_library(${PROJECT_NAME}_widgets
-  ${opp_gui_UIS_H}
-  ${opp_gui_widget_MOCS}
-  ${opp_gui_widget_SOURCES}
+add_library(${PROJECT_NAME}_tool_path_widgets
+  ${opp_gui_tool_path_UIS_H}
+  ${opp_gui_tool_path_widget_MOCS}
+  ${opp_gui_tool_path_widget_SOURCES}
 )
-target_link_libraries(${PROJECT_NAME}_widgets
+target_link_libraries(${PROJECT_NAME}_tool_path_widgets
   ${catkin_LIBRARIES}
   ${PCL_LIBRARIES}
   ${PROJECT_NAME}_utils
@@ -146,74 +146,74 @@ target_link_libraries(${PROJECT_NAME}_widgets
 )
 
 # Rviz Panel
-add_library(${PROJECT_NAME}_panels
-  ${opp_gui_panel_MOCS}
-  ${opp_gui_panel_SOURCES}
+add_library(${PROJECT_NAME}_tool_path_panels
+  ${opp_gui_tool_path_panel_MOCS}
+  ${opp_gui_tool_path_panel_SOURCES}
 )
-target_link_libraries(${PROJECT_NAME}_panels
-  ${PROJECT_NAME}_widgets
+target_link_libraries(${PROJECT_NAME}_tool_path_panels
+  ${PROJECT_NAME}_tool_path_widgets
 )
 
-# SQL Panel
-set(opp_gui_multi_UIS
+# Job Panel
+set(opp_gui_job_UIS
   ui/list_editor.ui
   ui/polygon_area_selection_widget.ui
   ui/segmentation_parameters_editor.ui
   ui/surface_selection_combo_widget.ui
   ui/tool_path_parameters_editor.ui
-  ui/multi_tool_path_planner.ui
+  ui/job_planner.ui
   ui/touch_point_parameters_editor.ui
 )
 
-set(opp_gui_multi_widget_HEADERS
+set(opp_gui_job_widget_HEADERS
   include/${PROJECT_NAME}/widgets/list_editor_widget_base.h
   include/${PROJECT_NAME}/widgets/polygon_area_selection_widget.h
   include/${PROJECT_NAME}/widgets/segmentation_parameters_editor_widget.h
   include/${PROJECT_NAME}/widgets/surface_selection_combo_widget.h
   include/${PROJECT_NAME}/widgets/tool_path_editor_widget.h
   include/${PROJECT_NAME}/widgets/tool_path_parameters_editor_widget.h
-  include/${PROJECT_NAME}/widgets/multi_tool_path_planner_widget.h
+  include/${PROJECT_NAME}/widgets/job_planner_widget.h
   include/${PROJECT_NAME}/widgets/touch_point_editor_widget.h
   include/${PROJECT_NAME}/widgets/touch_point_parameters_editor_widget.h
 )
 
-set(opp_gui_multi_widget_SOURCES
+set(opp_gui_job_widget_SOURCES
   src/widgets/polygon_area_selection_widget.cpp
   src/widgets/segmentation_parameters_editor_widget.cpp
   src/widgets/surface_selection_combo_widget.cpp
   src/widgets/tool_path_editor_widget.cpp
   src/widgets/tool_path_parameters_editor_widget.cpp
-  src/widgets/multi_tool_path_planner_widget.cpp
+  src/widgets/job_planner_widget.cpp
   src/widgets/touch_point_editor_widget.cpp
   src/widgets/touch_point_parameters_editor_widget.cpp
 )
 
-set(opp_gui_multi_panel_HEADERS
-  include/${PROJECT_NAME}/multi_tool_path_planner_panel.h
+set(opp_gui_job_panel_HEADERS
+  include/${PROJECT_NAME}/job_planner_panel.h
 )
 
-set(opp_gui_multi_panel_SOURCES
-  src/multi_tool_path_planner_panel.cpp
+set(opp_gui_job_panel_SOURCES
+  src/job_planner_panel.cpp
 )
 
 # Run the MOC on the Qt-related UIs and headers
-qt5_wrap_ui(opp_gui_multi_UIS_H
-  ${opp_gui_multi_UIS}
+qt5_wrap_ui(opp_gui_job_UIS_H
+  ${opp_gui_job_UIS}
 )
-qt5_wrap_cpp(opp_gui_multi_widget_MOCS
-  ${opp_gui_multi_widget_HEADERS}
+qt5_wrap_cpp(opp_gui_job_widget_MOCS
+  ${opp_gui_job_widget_HEADERS}
 )
-qt5_wrap_cpp(opp_gui_multi_panel_MOCS
-  ${opp_gui_multi_panel_HEADERS}
+qt5_wrap_cpp(opp_gui_job_panel_MOCS
+  ${opp_gui_job_panel_HEADERS}
 )
 
 # Qt Widgets
-add_library(${PROJECT_NAME}_multi_widgets
-  ${opp_gui_multi_UIS_H}
-  ${opp_gui_multi_widget_MOCS}
-  ${opp_gui_multi_widget_SOURCES}
+add_library(${PROJECT_NAME}_job_widgets
+  ${opp_gui_job_UIS_H}
+  ${opp_gui_job_widget_MOCS}
+  ${opp_gui_job_widget_SOURCES}
 )
-target_link_libraries(${PROJECT_NAME}_multi_widgets
+target_link_libraries(${PROJECT_NAME}_job_widgets
   ${catkin_LIBRARIES}
   ${PCL_LIBRARIES}
   ${PROJECT_NAME}_utils
@@ -222,12 +222,12 @@ target_link_libraries(${PROJECT_NAME}_multi_widgets
 )
 
 # Rviz Panel
-add_library(${PROJECT_NAME}_multi_panels
-  ${opp_gui_multi_panel_MOCS}
-  ${opp_gui_multi_panel_SOURCES}
+add_library(${PROJECT_NAME}_job_panels
+  ${opp_gui_job_panel_MOCS}
+  ${opp_gui_job_panel_SOURCES}
 )
-target_link_libraries(${PROJECT_NAME}_multi_panels
-  ${PROJECT_NAME}_multi_widgets
+target_link_libraries(${PROJECT_NAME}_job_panels
+  ${PROJECT_NAME}_job_widgets
 )
 
 ######################
@@ -239,7 +239,7 @@ add_executable(segmentation_demo_app
   src/nodes/segmentation_demo_app.cpp
 )
 target_link_libraries(segmentation_demo_app
-  ${PROJECT_NAME}_multi_widgets
+  ${PROJECT_NAME}_job_widgets
 )
 
 # Tool Path Editor
@@ -247,15 +247,15 @@ add_executable(tool_path_editor_demo_app
   src/nodes/tool_path_editor_demo_app.cpp
 )
 target_link_libraries(tool_path_editor_demo_app
-  ${PROJECT_NAME}_multi_widgets
+  ${PROJECT_NAME}_job_widgets
 )
 
 # Tool Path Planner
-add_executable(tool_path_planner_demo_app
-  src/nodes/tool_path_planner_demo_app.cpp
+add_executable(job_planner_demo_app
+  src/nodes/job_planner_demo_app.cpp
 )
-target_link_libraries(tool_path_planner_demo_app
-  ${PROJECT_NAME}_multi_widgets
+target_link_libraries(job_planner_demo_app
+  ${PROJECT_NAME}_job_widgets
 )
 
 # Touch Point Editor
@@ -263,7 +263,7 @@ add_executable(touch_point_editor_demo_app
   src/nodes/touch_point_editor_demo_app.cpp
 )
 target_link_libraries(touch_point_editor_demo_app
-  ${PROJECT_NAME}_multi_widgets
+  ${PROJECT_NAME}_job_widgets
 )
 
 #############
@@ -272,14 +272,14 @@ target_link_libraries(touch_point_editor_demo_app
 
 install(
   TARGETS
-    ${PROJECT_NAME}_panels
-    ${PROJECT_NAME}_multi_panels
+    ${PROJECT_NAME}_tool_path_panels
+    ${PROJECT_NAME}_job_panels
     ${PROJECT_NAME}_utils
-    ${PROJECT_NAME}_widgets
-    ${PROJECT_NAME}_multi_widgets
+    ${PROJECT_NAME}_tool_path_widgets
+    ${PROJECT_NAME}_job_widgets
     segmentation_demo_app
     tool_path_editor_demo_app
-    tool_path_planner_demo_app
+    job_planner_demo_app
     touch_point_editor_demo_app
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}

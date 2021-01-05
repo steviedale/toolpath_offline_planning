@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "opp_gui/widgets/multi_tool_path_planner_widget.h"
+#include "opp_gui/widgets/job_planner_widget.h"
 
 #include <map>
 #include <regex>
@@ -33,7 +33,7 @@
 #include "opp_gui/utils.h"
 #include "opp_gui/widgets/tool_path_editor_widget.h"
 #include "opp_gui/widgets/touch_point_editor_widget.h"
-#include "ui_multi_tool_path_planner.h"
+#include "ui_job_planner.h"
 
 const static std::string MESH_MARKER_TOPIC = "mesh_marker";
 const static int MIN_TOUCH_POINTS = 0;
@@ -41,12 +41,12 @@ const static int MIN_VERIFICATION_POINTS = 0;
 
 namespace opp_gui
 {
-MultiToolPathPlannerWidget::MultiToolPathPlannerWidget(QWidget* parent,
+JobPlannerWidget::JobPlannerWidget(QWidget* parent,
                                              const ros::NodeHandle& nh,
                                              const std::vector<std::string>& frames)
   : QWidget(parent), nh_(nh)
 {
-  ui_ = new Ui::MultiToolPathPlanner();
+  ui_ = new Ui::JobPlanner();
   ui_->setupUi(this);
 
   // Add the available tf frame
@@ -94,33 +94,33 @@ MultiToolPathPlannerWidget::MultiToolPathPlannerWidget(QWidget* parent,
   setJobTabsEnabled(false, false);
 
   // Connect the signals and slots
-  connect(ui_->push_button_find_model_file, &QPushButton::clicked, this, &MultiToolPathPlannerWidget::browseForMeshResource);
+  connect(ui_->push_button_find_model_file, &QPushButton::clicked, this, &JobPlannerWidget::browseForMeshResource);
   connect(ui_->push_button_load_parts_from_database,
           &QPushButton::clicked,
           this,
-          &MultiToolPathPlannerWidget::loadModelsFromDatabase);
+          &JobPlannerWidget::loadModelsFromDatabase);
   loadModelsFromDatabase();
   connect(
-      ui_->list_widget_parts, &QListWidget::currentItemChanged, this, &MultiToolPathPlannerWidget::onModelSelectionChanged);
-  connect(ui_->push_button_load_selected_part, &QPushButton::clicked, this, &MultiToolPathPlannerWidget::loadSelectedModel);
-  connect(ui_->push_button_save_entry, &QPushButton::clicked, this, &MultiToolPathPlannerWidget::saveModel);
+      ui_->list_widget_parts, &QListWidget::currentItemChanged, this, &JobPlannerWidget::onModelSelectionChanged);
+  connect(ui_->push_button_load_selected_part, &QPushButton::clicked, this, &JobPlannerWidget::loadSelectedModel);
+  connect(ui_->push_button_save_entry, &QPushButton::clicked, this, &JobPlannerWidget::saveModel);
 
   // Signals & slots for the buttons on job definition page
-  connect(ui_->push_button_new_job, &QPushButton::clicked, this, &MultiToolPathPlannerWidget::newJob);
+  connect(ui_->push_button_new_job, &QPushButton::clicked, this, &JobPlannerWidget::newJob);
   connect(ui_->push_button_load_jobs_from_database,
           &QPushButton::clicked,
           this,
-          &MultiToolPathPlannerWidget::loadJobsFromDatabase);
-  connect(ui_->list_widget_jobs, &QListWidget::currentItemChanged, this, &MultiToolPathPlannerWidget::onJobSelectionChanged);
-  connect(ui_->push_button_load_selected_job, &QPushButton::clicked, this, &MultiToolPathPlannerWidget::loadSelectedJob);
-  connect(ui_->push_button_save_job, &QPushButton::clicked, this, &MultiToolPathPlannerWidget::saveJob);
+          &JobPlannerWidget::loadJobsFromDatabase);
+  connect(ui_->list_widget_jobs, &QListWidget::currentItemChanged, this, &JobPlannerWidget::onJobSelectionChanged);
+  connect(ui_->push_button_load_selected_job, &QPushButton::clicked, this, &JobPlannerWidget::loadSelectedJob);
+  connect(ui_->push_button_save_job, &QPushButton::clicked, this, &JobPlannerWidget::saveJob);
 
   // Signals & Slots for the Buttons on database management page
-  connect(ui_->push_button_show_part, &QPushButton::clicked, this, &MultiToolPathPlannerWidget::showPartFromDatabase);
-  connect(ui_->push_button_suppress_part, &QPushButton::clicked, this, &MultiToolPathPlannerWidget::deletePart);
-  connect(ui_->push_button_suppress_job, &QPushButton::clicked, this, &MultiToolPathPlannerWidget::deleteJob);
-  connect(ui_->push_button_refresh_parts, &QPushButton::clicked, this, &MultiToolPathPlannerWidget::refresh);
-  connect(ui_->push_button_refresh_jobs, &QPushButton::clicked, this, &MultiToolPathPlannerWidget::refresh);
+  connect(ui_->push_button_show_part, &QPushButton::clicked, this, &JobPlannerWidget::showPartFromDatabase);
+  connect(ui_->push_button_suppress_part, &QPushButton::clicked, this, &JobPlannerWidget::deletePart);
+  connect(ui_->push_button_suppress_job, &QPushButton::clicked, this, &JobPlannerWidget::deleteJob);
+  connect(ui_->push_button_refresh_parts, &QPushButton::clicked, this, &JobPlannerWidget::refresh);
+  connect(ui_->push_button_refresh_jobs, &QPushButton::clicked, this, &JobPlannerWidget::refresh);
 
   // Add a publisher for the mesh marker
   pub_ = nh_.advertise<visualization_msgs::Marker>(MESH_MARKER_TOPIC, 1, true);
@@ -148,7 +148,7 @@ MultiToolPathPlannerWidget::MultiToolPathPlannerWidget(QWidget* parent,
   ui_->table_view_jobs->show();
 }
 
-void MultiToolPathPlannerWidget::setVisualizationFrame(const QString& text)
+void JobPlannerWidget::setVisualizationFrame(const QString& text)
 {
   marker_frame_ = text.toStdString();
   touch_point_editor_->setMarkerFrame(marker_frame_);
@@ -157,7 +157,7 @@ void MultiToolPathPlannerWidget::setVisualizationFrame(const QString& text)
 }
 
 // Parts Page
-void MultiToolPathPlannerWidget::browseForMeshResource()
+void JobPlannerWidget::browseForMeshResource()
 {
   QString filename = QFileDialog::getOpenFileName(this, "Load Model", "", "Mesh Files (*.stl *.ply *.obj)");
   if (filename.isEmpty())
@@ -171,7 +171,7 @@ void MultiToolPathPlannerWidget::browseForMeshResource()
   return;
 }
 
-void MultiToolPathPlannerWidget::loadMeshFromResource()
+void JobPlannerWidget::loadMeshFromResource()
 {
   // Get the filename and package of the model
   std::string filename = ui_->line_edit_model_filename->text().toStdString();
@@ -211,7 +211,7 @@ void MultiToolPathPlannerWidget::loadMeshFromResource()
     return;
 }
 
-void MultiToolPathPlannerWidget::loadModelsFromDatabase()
+void JobPlannerWidget::loadModelsFromDatabase()
 {
   // Create the variables the database interface will fill
   std::map<unsigned int, opp_msgs::Part> parts_map;
@@ -245,7 +245,7 @@ void MultiToolPathPlannerWidget::loadModelsFromDatabase()
   return;
 }
 
-void MultiToolPathPlannerWidget::onModelSelectionChanged(QListWidgetItem* current, QListWidgetItem*)
+void JobPlannerWidget::onModelSelectionChanged(QListWidgetItem* current, QListWidgetItem*)
 {
   // Change the description display
   if (current != nullptr)
@@ -254,7 +254,7 @@ void MultiToolPathPlannerWidget::onModelSelectionChanged(QListWidgetItem* curren
   }
 }
 
-void MultiToolPathPlannerWidget::loadSelectedModel()
+void JobPlannerWidget::loadSelectedModel()
 {
   int row = ui_->list_widget_parts->currentRow();
   if (row >= 0 && row < static_cast<int>(existing_parts_.size()))
@@ -283,7 +283,7 @@ void MultiToolPathPlannerWidget::loadSelectedModel()
   }
 }
 
-void MultiToolPathPlannerWidget::saveModel()
+void JobPlannerWidget::saveModel()
 {
   // Verify that the user intended to save the part
   QMessageBox::StandardButton button =
@@ -361,7 +361,7 @@ void MultiToolPathPlannerWidget::saveModel()
 }
 
 // Jobs Page
-void MultiToolPathPlannerWidget::newJob()
+void JobPlannerWidget::newJob()
 {
   std::vector<opp_msgs::ToolPath> empty;
   tool_path_editor_->addToolPathData(empty);
@@ -369,7 +369,7 @@ void MultiToolPathPlannerWidget::newJob()
   return;
 }
 
-void MultiToolPathPlannerWidget::loadJobsFromDatabase()
+void JobPlannerWidget::loadJobsFromDatabase()
 {
   std::map<unsigned int, opp_msgs::Job> jobs_map;
   std::string message;
@@ -391,7 +391,7 @@ void MultiToolPathPlannerWidget::loadJobsFromDatabase()
   return;
 }
 
-void MultiToolPathPlannerWidget::onJobSelectionChanged(QListWidgetItem* current, QListWidgetItem* previous)
+void JobPlannerWidget::onJobSelectionChanged(QListWidgetItem* current, QListWidgetItem* previous)
 {
   (void)previous;
 
@@ -407,7 +407,7 @@ void MultiToolPathPlannerWidget::onJobSelectionChanged(QListWidgetItem* current,
   return;
 }
 
-void MultiToolPathPlannerWidget::loadSelectedJob()
+void JobPlannerWidget::loadSelectedJob()
 {
   int row = ui_->list_widget_jobs->currentRow();
   if (row >= 0 && row < static_cast<int>(existing_jobs_.size()))
@@ -431,7 +431,7 @@ void MultiToolPathPlannerWidget::loadSelectedJob()
   return;
 }
 
-void MultiToolPathPlannerWidget::saveJob()
+void JobPlannerWidget::saveJob()
 {
   // Verify that the user intended to press this button
   QMessageBox::StandardButton button =
@@ -485,7 +485,7 @@ void MultiToolPathPlannerWidget::saveJob()
 }
 
 // Database Management Page
-void MultiToolPathPlannerWidget::showPartFromDatabase()
+void JobPlannerWidget::showPartFromDatabase()
 {
   // Get the part id of the currently selected row
   QModelIndex index = ui_->table_view_parts->currentIndex();
@@ -521,7 +521,7 @@ void MultiToolPathPlannerWidget::showPartFromDatabase()
   loadJobsFromDatabase();
 }
 
-void MultiToolPathPlannerWidget::deletePart()
+void JobPlannerWidget::deletePart()
 {
   // Get the part id of the currently selected row
   QModelIndex index = ui_->table_view_parts->currentIndex();
@@ -551,7 +551,7 @@ void MultiToolPathPlannerWidget::deletePart()
   return;
 }
 
-void MultiToolPathPlannerWidget::deleteJob()
+void JobPlannerWidget::deleteJob()
 {
   // Get the id of the currently selected row
   QModelIndex index = ui_->table_view_jobs->currentIndex();
@@ -572,7 +572,7 @@ void MultiToolPathPlannerWidget::deleteJob()
   return;
 }
 
-void MultiToolPathPlannerWidget::refresh()
+void JobPlannerWidget::refresh()
 {
   std::string query = "`suppressed`!=\"1\"";
   model_parts_->setFilter(QString::fromStdString(query));
@@ -583,7 +583,7 @@ void MultiToolPathPlannerWidget::refresh()
 }
 
 // Private functions
-void MultiToolPathPlannerWidget::clear()
+void JobPlannerWidget::clear()
 {
   // Clear the data in the list editor widgets
   touch_point_editor_->clear();
@@ -599,7 +599,7 @@ void MultiToolPathPlannerWidget::clear()
   ui_->plain_text_edit_job_description->clear();
 }
 
-bool MultiToolPathPlannerWidget::loadMesh()
+bool JobPlannerWidget::loadMesh()
 {
   // Attempt to load this file into a shape_msgs/Mesh type
   shape_msgs::Mesh mesh;
@@ -629,7 +629,7 @@ bool MultiToolPathPlannerWidget::loadMesh()
   return true;
 }
 
-void MultiToolPathPlannerWidget::setModelTabsEnabled(bool enabled)
+void JobPlannerWidget::setModelTabsEnabled(bool enabled)
 {
   for (int i = 1; i < ui_->tool_box_model_editor->count(); ++i)
   {
@@ -640,7 +640,7 @@ void MultiToolPathPlannerWidget::setModelTabsEnabled(bool enabled)
   ui_->frame_define_verification_points->setEnabled(enabled);
 }
 
-void MultiToolPathPlannerWidget::setJobTabsEnabled(bool enabled, bool first_enabled)
+void JobPlannerWidget::setJobTabsEnabled(bool enabled, bool first_enabled)
 {
   for (int i = 1; i < ui_->tool_box_job_editor->count(); ++i)
   {

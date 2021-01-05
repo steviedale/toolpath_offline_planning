@@ -22,25 +22,25 @@
 
 namespace opp_gui
 {
-class MultiToolPathPlannerWidget;
+class JobPlannerWidget;
 
 /**
  * @brief Simple RViz panel that wraps the tool path planner widget such that can easily
  * be used within the context of RViz
  */
-class MultiToolPathPlannerPanel : public rviz::Panel
+class JobPlannerPanel : public rviz::Panel
 {
   Q_OBJECT
 public:
   /**
-   * @brief MultiToolPathPlannerPanel
+   * @brief JobPlannerPanel
    *
    * Note: the visualization manager object, inherited from `rviz::Panel`, cannot be used in
    * the constructor. Even though it is a valid, non-null object, it will not be initialized
    * until the constructor has finished.
    * @param parent
    */
-  MultiToolPathPlannerPanel(QWidget* parent = nullptr);
+  JobPlannerPanel(QWidget* parent = nullptr);
 
   /**
    * @brief Initializes the TPP widget and uses the visualization manager to gather
@@ -49,7 +49,7 @@ public:
   virtual void onInitialize() override;
 
 private:
-  MultiToolPathPlannerWidget* tpp_widget_;
+  JobPlannerWidget* tpp_widget_;
 
   ros::NodeHandle nh_;
 };

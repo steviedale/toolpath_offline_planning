@@ -19,11 +19,11 @@
 #include <ros/ros.h>
 
 #include "opp_gui/utils.h"
-#include "opp_gui/widgets/multi_tool_path_planner_widget.h"
+#include "opp_gui/widgets/job_planner_widget.h"
 
 int main(int argc, char** argv)
 {
-  ros::init(argc, argv, "tool_path_planner_demo_app");
+  ros::init(argc, argv, "job_planner_demo_app");
   ros::NodeHandle nh, pnh("~");
 
   ros::AsyncSpinner spinner(1);
@@ -36,7 +36,7 @@ int main(int argc, char** argv)
   // Create and start the Qt application
   QApplication app(argc, argv);
 
-  opp_gui::MultiToolPathPlannerWidget* tpp_widget = new opp_gui::MultiToolPathPlannerWidget(nullptr, nh, { fixed_frame });
+  opp_gui::JobPlannerWidget* tpp_widget = new opp_gui::JobPlannerWidget(nullptr, nh, { fixed_frame });
   tpp_widget->show();
 
   app.exec();
